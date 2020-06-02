@@ -1,5 +1,6 @@
 <?
 
+require_once 'resources.php';
 // Страница авторизации
 
 // Функция для генерации случайной строки
@@ -14,7 +15,7 @@ function generateCode($length=6) {
 }
 
 // Соединямся с БД
-$link = mysqli_connect($host, $dataBase, $password, $tableUsers);
+$link = mysqli_connect($host, $dataBase, $password, $tableUsers,$dataBaseUser);
 
 if(isset($_POST['submit']))
 {
@@ -36,7 +37,7 @@ if(isset($_POST['submit']))
         }
 
         // Записываем в БД новый хеш авторизации и IP
-        mysqli_query($link, "UPDATE". $tableUsers." SET user_hash='".$hash."' ".$insip." WHERE user_id='".$data['user_id']."'");
+        mysqli_query($link, "UPDATE ". $tableUsers." SET user_hash='".$hash."' ".$insip." WHERE user_id='".$data['user_id']."'");
 
         // Ставим куки
         setcookie("id", $data['user_id'], time()+60*60*24*30, "/");

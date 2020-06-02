@@ -1,5 +1,6 @@
 <?php
 $host="localhost";
 $dataBase="f0443710_user";
-$password="rclqq0eV";
+$dataBaseUser="f0443710_user";
+$password="dySyvmrp";
 $tableUsers = "users";

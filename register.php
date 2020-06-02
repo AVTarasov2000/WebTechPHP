@@ -1,11 +1,15 @@
 <?php
 
+require_once 'resources.php';
+// Страница регистрации нового пользователя
 
-$link = mysqli_connect($host, $dataBase, $password, $tableUsers);
+// Соединямся с БД
+$link = mysqli_connect($host, $dataBase, $password, $dataBaseUser);
 
 if (isset($_POST['submit'])) {
     $err = [];
 
+    // проверям логин
     if (!preg_match("/^[a-zA-Z0-9]+$/", $_POST['login'])) {
         $err[] = "Логин может состоять только из букв английского алфавита и цифр";
     }
@@ -14,15 +18,18 @@ if (isset($_POST['submit'])) {
         $err[] = "Логин должен быть не меньше 3-х символов и не больше 30";
     }
 
+    // проверяем, не сущестует ли пользователя с таким именем
     $query = mysqli_query($link, "SELECT user_id FROM ". $tableUsers." WHERE user_login='" . mysqli_real_escape_string($link, $_POST['login']) . "'");
     if (mysqli_num_rows($query) > 0) {
         $err[] = "Пользователь с таким логином уже существует в базе данных";
     }
 
+    // Если нет ошибок, то добавляем в БД нового пользователя
     if (count($err) == 0) {
 
         $login = $_POST['login'];
 
+        // Убераем лишние пробелы и делаем двойное хеширование
         $password = md5(md5(trim($_POST['password'])));
 
         mysqli_query($link, "INSERT INTO ". $tableUsers ." SET user_login='" . $login . "', user_password='" . $password . "'");
